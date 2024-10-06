@@ -1,0 +1,81 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX 100
+
+struct Contact {
+    char name[50];
+    char phone[15];
+    char email[50];
+};
+
+void addContact(struct Contact contacts[], int *count) {
+    if (*count < MAX) {
+        printf("Enter name: ");
+        scanf(" %[^\n]", contacts[*count].name);
+        printf("Enter phone number: ");
+        scanf(" %[^\n]", contacts[*count].phone);
+        printf("Enter email: ");
+        scanf(" %[^\n]", contacts[*count].email);
+        (*count)++;
+        printf("Contact added!\n");
+    } else {
+        printf("Contact list full!\n");
+    }
+}
+
+void viewContacts(struct Contact contacts[], int count) {
+    for (int i = 0; i < count; i++) {
+        printf("Name: %s, Phone: %s, Email: %s\n", contacts[i].name, contacts[i].phone, contacts[i].email);
+    }
+}
+
+void searchContact(struct Contact contacts[], int count) {
+    char name[50];
+    printf("Enter name to search: ");
+    scanf(" %[^\n]", name);
+    for (int i = 0; i < count; i++) {
+        if (strcmp(contacts[i].name, name) == 0) {
+            printf("Found: %s, Phone: %s, Email: %s\n", contacts[i].name, contacts[i].phone, contacts[i].email);
+            return;
+        }
+    }
+    printf("Contact not found.\n");
+}
+
+void deleteContact(struct Contact contacts[], int *count) {
+    char name[50];
+    printf("Enter name to delete: ");
+    scanf(" %[^\n]", name);
+    for (int i = 0; i < *count; i++) {
+        if (strcmp(contacts[i].name, name) == 0) {
+            for (int j = i; j < *count - 1; j++) {
+                contacts[j] = contacts[j + 1];
+            }
+            (*count)--;
+            printf("Contact deleted!\n");
+            return;
+        }
+    }
+    printf("Contact not found.\n");
+}
+
+int main() {
+    struct Contact contacts[MAX];
+    int count = 0, choice;
+
+    do {
+        printf("\n1. Add Contact\n2. View Contacts\n3. Search Contact\n4. Delete Contact\n5. Exit\nEnter choice: ");
+        scanf("%d", &choice);
+        switch (choice) {
+            case 1: addContact(contacts, &count); break;
+            case 2: viewContacts(contacts, count); break;
+            case 3: searchContact(contacts, count); break;
+            case 4: deleteContact(contacts, &count); break;
+            case 5: printf("Exiting...\n"); break;
+            default: printf("Invalid choice!\n");
+        }
+    } while (choice != 5);
+
+    return 0;
+}
